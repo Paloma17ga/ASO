@@ -1,5 +1,10 @@
 #!/bin/bash
 
+####################
+#Autor: Paloma García
+#Description: Script que recibe la ruta de un fichero y muestra sus lineas numeradas 
+###################
+
 if [ -z $1 ]; then
 	echo "Error: Introduce un parametro. "
 	exit;
