@@ -6,7 +6,7 @@
 #que muestra los usuarios del sistema
 #######################
 
-#Definicion de la ruta, del fichero y de la extension del fichero en el que almacenaremos la página web
+#Definicion variables ruta, fichero y extension del fichero en el que almacenaremos la página web
 path=/var/www/html/
 pagina=usuarios_sistema
 extension=".html"
@@ -31,5 +31,5 @@ while 	read linea;do
 done < ficherou.txt
 echo $fin >> $fichero
 
-#Abrimos el navegador Firefox
-/usr/bin/firefox http://localhost/$pagina/$extension
+#Abrimos el navegador Lynx para comprobar su funcionamiento
+/usr/bin/lynx http://localhost/$pagina$extension
