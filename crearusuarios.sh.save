@@ -1,0 +1,24 @@
+#!/bin/bash
+
+################
+#Autor:
+#Descripcion: Script que pide nombre de usuario y otros datos 
+#y permite crear usuarios hasta que se escriba salir
+#################
+
+echo "Escribe el nombre de usuario"
+read usuario
+echo "Escribe el home /home/x"
+read home
+
+while [ $usuario != "salir" ]; do
+	useradd -m -d $home $usuario
+	sudo passwd $usuario
+	echo "Introduce otro nombre"
+	read usuario
+	echo "Home"
+	read home
+done
+
+tail -1 /etc/passwd
+
