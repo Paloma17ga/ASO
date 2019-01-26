@@ -1,18 +1,17 @@
-#!/bin/bash
+﻿#!/bin/bash
 
 ##########################
-##Autor: Paloma García
-##Description: Script que muestra un menú y
-## nos permite crear, listar y borrar unidades organizativas y usuarios...
+# Author: Paloma García
+# Description: Script que muestra un menú y
+# permite crear, listar y borrar unidades organizativas y usuarios...
 ##########################
 
 #Recogemos los datos del dominio
-	clear
-	echo "------------------------------"
-        echo "Escriba nombre de dominio : "
-        read dc1
-        echo "Escriba terminación de dominio : "
-        read dc2
+clear
+echo "Introduzca nombre de dominio "
+read dc1
+echo "Introduzca terminación de dominio "
+read dc2
 
 #Función menú
 show_menu(){
@@ -47,7 +46,7 @@ read_option(){
 ##Función que recoge nombre, crea unidad organizativa, lista y permite seguir creando
 crearou(){
 	clear
-	echo "Escriba un nombre para nueva OU - salir para volver al menú"
+	echo "Introduzca un nombre para su nueva OU - salir para para volver al menú"
 	read ou
 
 	while [ $ou != "salir" ]; do
@@ -55,46 +54,48 @@ crearou(){
 		echo "ObjectClass: organizationalUnit" >> crearou.ldif
 		echo "ou: $ou" >>crearou.ldif
 		ldapadd -D "cn=admin,dc=$dc1,dc=$dc2" -W -f crearou.ldif
-		echo "Escriba un nombre para crear otra ou - salir para volver al menú "
+        	echo "-- Lista unidades organizativas del dominio $dc1 . $dc2 --"
+       		ldapsearch -x -b "dc=$dc1,dc=$dc2" objectClass=organizationalUnit | grep dn:
+		echo "Introduzca un nombre para su nueva OU - salir para volver al menú "
 		read ou
 	done
-	echo "-- Unidad organizativa borrada correctamente"
-	echo "-- Lista unidades organizativas del dominio $dc1 . $dc2 --"
-	ldapsearch -x -b "dc=$d1,dc=$d2" objectClass=organizationalUnit | grep dn:
 }
 
 ##Función que lista las ou y permite borrarlas
 borrarou(){
 	clear
+	echo "-- Lista unidades organizativas del dominio $dc1 . $dc2 --"
 	ldapsearch -x -b "dc=$dc1,dc=$dc2" objectClass=organizationalUnit | grep dn:
-	echo "Escriba nombre unidad organizativa a borrar - salir para volver al menú"
+	echo "Introduzca el nombre unidad organizativa a borrar - salir para volver al menú"
 	read ou
+
 	while [ $ou != "salir" ]; do
 		echo "Confirme que desea borrar la OU $ou s/n"
 		read confir
 		if [ $confir = s ];then
 			ldapdelete -x -D "cn=admin,dc=$dc1,dc=$dc2" -W ou=$ou,dc=$dc1,dc=$dc2 
-			ldapsearch -x -b "dc=$dc1,dc=$dc2" objectClass=organizationalUnit | grep dn:
 		fi
-		echo "-- Unidad Organizativa borrada correctamente --"
-		echo "Introduce otra OU - salir para volver al menú"
+        	echo "-- Lista unidades organizativas del dominio $dc1 . $dc2 --"
+        	ldapsearch -x -b "dc=$dc1,dc=$dc2" objectClass=organizationalUnit | grep dn:
+		echo "Introduzca el nombre unidad organizativa a borrar - salir para volver al menú"
 		read ou
 	done
 }
 
 ##Función que crea usuarios en unidad organizativa y lista los usuarios
 crearu(){
-	echo "Escriba la unidad organizativa a la que desea añadir el usuario"
+	clear
+	echo "Introduzca unidad organizativa a la que desea añadir el usuario"
 	read ou
-	echo "Escriba un nombre para su usuario - salir para volver al menú"
+	echo "Introduzca un nombre para su usuario - salir para volver al menú"
 	read usuario
 
 	while [ $usuario != "salir" ]; do
 		echo "-- Uid último usuario --"
 		ldapsearch -x -b "dc=$dc1,dc=$dc2" objectClass=person | grep uid | tail -1
-		echo "Escriba el uid de su nuevo usuario"
+		echo "Introduzca el uid de su nuevo usuario"
 		read uid
-		echo "Escribe el apellido"
+		echo "Introduzca el apellido"
 		read apellido
 		echo "dn: cn=$usuario,ou=$ou,dc=$dc1,dc=$dc2" > crearuser.ldif
 		echo "objectClass: inetOrgPerson" >> crearuser.ldif
@@ -105,34 +106,33 @@ crearu(){
 		echo "givenName: $usuario" >> crearuser.ldif
 
 		ldapadd -D "cn=admin,dc=$dc1,dc=$dc2" -W -f crearuser.ldif
-##userPassword: {SSHA}6dVMmOtZ7P0mSR/FN9peprES6P1rV5
-
-		echo "Escriba un nombre para su usuario - salir para volver al menú "
+		echo "-- Listado usuarios del dominio $dc1 . $dc2 --"
+       		ldapsearch -x -b "dc=$dc1,dc=$dc2" objectClass=person | grep cn
+		echo "Introduzca un nombre para su usuario - salir para volver al menú "
 		read usuario
-
 	done
-	echo "-- Listado usuarios del dominio $dc1 . $dc2 --"
-	ldapsearch -x -b "dc=$dc1,dc=$dc2" objectClass=person
 }
 
 #Función que lista los usuarios y los borra
 borraru(){
         clear
+	echo "-- Listado usuarios del dominio $dc1 . $dc2 --"
         ldapsearch -x -b "dc=$dc1,dc=$dc2" objectClass=person | grep cn
-        echo "Escriba nombre del usuario que desea borrar - salir para volver al menú"
+        echo "Introduzca nombre del usuario que desea borrar - salir para volver al menú"
         read usuario
-	echo "Escriba la ou a la que pertenece su usuario"
+	echo "Introduzca la ou a la que pertenece su usuario"
 	read ou
+
         while [ $usuario != "salir" ]; do
                 echo "Confirme que desea borrar el usuario $usuario s/n"
                 read confir
                 if [ $confir = s ];then
-                        ldapdelete -x -D "cn=admin,dc=$dc1,dc=$dc2" -W uid=$usuario,ou=$ou,dc=$dc1,dc=$dc2 
-                        echo "-- Listado usuarios del dominio $dc1 . $dc2"
+                        ldapdelete -x -D "cn=admin,dc=$dc1,dc=$dc2" -W cn=$usuario,ou=$ou,dc=$dc1,dc=$dc2 
+                        echo "-- Listado usuarios del dominio $dc1 . $dc2 --"
 			ldapsearch -x -b "dc=$dc1,dc=$dc2" objectClass=person | grep cn
 		fi
-                echo "-- Usuario borrada correctamente --"
-                echo "Escribe otro nombre de usuario para borrar - salir para volver al menú"
+
+		echo "Introduzca nombre del usuario que desea borrar - salir para volver al menú"
                 read usuario
         done
 }
