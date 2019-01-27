@@ -14,7 +14,6 @@ read usuario
 
 while [ $usuario != "salir" ]; do
 	userdel $usuario
-	echo "-- Usuario $usuario borrado correctamente --"
         echo "-- Usuarios del sistema --"
         user= cat /etc/passwd | cut -d : -f 1
 	echo "Introduzca nombre de usuario a borrar - salir para cerrar el script"
