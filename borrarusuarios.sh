@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ################
-#Autor:
+#Autor: Paloma García
 #Descripcion: Script que pide nombre de usuario
 #y permite eliminar usuarios hasta que se escriba salir
 #################
