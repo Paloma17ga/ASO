@@ -1,7 +1,7 @@
 ﻿#!/bin/bash
 
 ################
-#Autor:
+#Autor: Paloma García
 #Descripcion: Script que pide nombre de usuario y otros datos 
 #y permite crear usuarios hasta que se escriba salir
 #################
