@@ -14,8 +14,6 @@ while [ $usuario != "salir" ]; do
 	useradd -m -d /home/$usuario $usuario
 #	Añade contraseña a usuario
 #	passwd $usuario
-	clear
-	echo "-- Usuario $usuario añadido correctamente --"
-	echo "Introduzca otro nombre para nuevo usuario - salir para cerrar el script"
+	echo "Introduzca nombre para nuevo usuario - salir para cerrar el script"
 	read usuario
 done
