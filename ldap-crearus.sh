@@ -12,10 +12,10 @@ echo "Introduzca terminacion de su dominio"
 read dc2
 echo "Introduzca unidad organizativa para su usuario"
 read ou
-echo "Introduzca un nombre para su nuevo usuario - salir saldrá del script "
+echo "Introduzca un nombre para su nuevo usuario -f- saldrá del script "
 read usuario
 
-while [ $usuario != "salir" ]; do
+while [ $usuario != "f" ]; do
 	echo "-- Uid último usuario --"
 	ldapsearch -x -b "dc=$dc1,dc=$dc2" objectClass=person | grep uid | tail -1
 	echo "Introduzca el uid de su nuevo usuario"
@@ -33,6 +33,6 @@ while [ $usuario != "salir" ]; do
 	echo "-- Usuario $usuario añadido correctamente  --"
 	echo "-- Listado usuarios del dominio $dc1 . $dc2 --"
     	ldapsearch -x -b "dc=$dc1,dc=$dc2" objectClass=person | grep cn
-	echo "Introduzca un nombre para su nuevo usuario - salir saldrá del script "
+	echo "Introduzca un nombre para su nuevo usuario -f- saldrá del script "
 	read usuario
 done

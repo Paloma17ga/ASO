@@ -10,10 +10,10 @@ echo "Introduzca su nombre de dominio"
 read dc1
 echo "Introduzca terminacion de su dominio"
 read dc2
-echo "Introduzca un nombre para su nueva OU - salir saldrá del script "
+echo "Introduzca un nombre para su nueva OU -f- saldrá del script "
 read ou
 
-while [ $ou != "salir" ]; do
+while [ $ou != "f" ]; do
 	echo "dn: ou=$ou,dc=$dc1,dc=$dc2" > crearou.ldif
 	echo "ObjectClass: organizationalUnit" >> crearou.ldif
 	echo "ou: $ou" >> crearou.ldif
@@ -21,7 +21,7 @@ while [ $ou != "salir" ]; do
 	echo "-- Unidad organizativa $ou creada correctamente --"
 	echo "-- Lista unidades organizativas --"
 	ldapsearch -x -b "dc=$dc1,dc=$dc2" objectClass=organizationalUnit| grep dn
-	echo "EIntroduzca un nombre para su nueva OU - salir saldrá del script "
+	echo "EIntroduzca un nombre para su nueva OU -f- saldrá del script "
 	read ou
 done
 
