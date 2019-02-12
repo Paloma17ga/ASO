@@ -16,6 +16,6 @@ do{
     $borrar = Read-Host "Desea eliminar logs de $nombrelog s/n"
     if ($borrar -eq "s"){
         Clear-EventLog -LogName $nombrelog
-    else {Read-Host "Pulse una tecla"}
+    else {Write-Host "No se borro $nombrelog"}
     }
 }until ($nombrelog -eq 's')
